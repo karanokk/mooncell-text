@@ -25,7 +25,7 @@ class MediaWikiEndpoints:
 
     def _format_list_value(self, params: dict) -> dict:
         for k, v in params.items():
-            if isinstance(v, list):
+            if isinstance(v, tuple) or isinstance(v, list):
                 assert(len(v) <= 50)
                 params[k] = '|'.join(v)
         return params
