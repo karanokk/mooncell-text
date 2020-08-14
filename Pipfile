@@ -11,6 +11,8 @@ rope = "*"
 [packages]
 requests = "*"
 lxml = "*"
+mockito = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.8"
