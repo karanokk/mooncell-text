@@ -1,6 +1,6 @@
 import unittest
 
-from mooncell_text.text_source.mediawiki_api import (
+from mooncell_text.mediawiki_api import (
     MediaWikiEndpoints, ParseParameter, ParseProp, QueryParameter, QueryProp)
 
 
