@@ -9,6 +9,8 @@ autopep8 = "*"
 rope = "*"
 
 [packages]
+requests = "*"
+lxml = "*"
 
 [requires]
 python_version = "3.8"
