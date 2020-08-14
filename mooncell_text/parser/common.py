@@ -3,10 +3,10 @@ from typing import Union
 
 from lxml import etree
 
-logger = logging.getLogger('masterdata.mooncell.extractor')
+logger = logging.getLogger('masterdata.mooncell.parser')
 
 
-class InfoExtractor:
+class InfoParser:
     _wikitable_nomobile_logo = 'wikitable nomobile logo'
     _wikitable_logo = 'wikitable logo'
     _wikitable_nomobile = 'wikitable nomobile'
@@ -20,24 +20,24 @@ class InfoExtractor:
     def title(self):
         return self.root.xpath('/html/head/title/text()')[0]
 
-    def extract(self, key: str = 'extract_') -> dict:
+    def parse(self, key: str = 'parse_') -> dict:
         info = {}
         drop_index = len(key)
         for fn_name in type(self).__dict__.keys():
             if fn_name.startswith(key):
                 name = fn_name[drop_index:]
-                extract_fn = getattr(self, fn_name)
+                parse_fn = getattr(self, fn_name)
                 try:
-                    res = extract_fn()
+                    res = parse_fn()
                 except:
                     logger.error(
-                        f'Failed to extract {name} in "{self.title()}".')
+                        f'Failed to parse {name} in "{self.title()}".')
                 else:
                     info[name] = res
         return info
 
 
-class MooncellIE(InfoExtractor):
+class MooncellIP(InfoParser):
     def elements_between(self, start: str, end: str = None):
         """Return a iterator of sibling elements between start and end section.
         End up with same tag of start section if end is None.

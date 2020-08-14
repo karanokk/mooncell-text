@@ -1,9 +1,9 @@
 import re
 
-from .common import MooncellIE
+from .common import MooncellIP
 
 
-class QuestIE(MooncellIE):
+class QuestIP(MooncellIP):
     ch_num_map = {
         '一': 1,
         '二': 2,
@@ -27,7 +27,7 @@ class QuestIE(MooncellIE):
             return self.ch_num_map[s[0]] * 10 + self.ch_num_map[s[-1]]
         raise ValueError()
 
-    def extract_main_quests(self):
+    def parse_main_quests(self):
         mains = []
         index = 0
         for table in self.tables_between(self._wikitable_logo, '主线关卡'):
@@ -68,7 +68,7 @@ class QuestIE(MooncellIE):
             mains.append(quest)
         return mains
 
-    def extract_free_quests(self):
+    def parse_free_quests(self):
         frees = []
         index = 1
         for table in self.tables_between(self._wikitable_logo, '自由关卡'):

@@ -1,10 +1,10 @@
 import re
 
-from .common import MooncellIE
+from .common import MooncellIP
 
 
-class ServantIE(MooncellIE):
-    def extract_basic_data(self):
+class ServantIP(MooncellIP):
+    def parse_basic_data(self):
         table = next(self.tables_between(self._wikitable_nomobile, '基础数值'))
         nick_names = self.root.xpath(
             'string(/html/head/meta[@name="keywords"]/@content)').split(',')
@@ -23,7 +23,7 @@ class ServantIE(MooncellIE):
         return locals()
 
     @staticmethod
-    def _extract_level_effects(trs):
+    def _parse_level_effects(trs):
         effects = []
         level_values = []
         for tr in trs:
@@ -36,29 +36,29 @@ class ServantIE(MooncellIE):
         assert len(effects) == len(level_values)
         return effects, level_values
 
-    def extract_treasure_devices(self):
+    def parse_treasure_devices(self):
         tables = self.tables_between(self._wikitable_nomobile_logo, '宝具')
 
         def is_special(table):
             title = table.getparent().get('title')
             return title and (title.endswith('限定') or title.startswith('灵基再临'))
 
-        tds = [self._extract_treasure_device(
+        tds = [self._parse_treasure_device(
             table) for table in tables if not is_special(table)]
         return tds
 
     @classmethod
-    def _extract_treasure_device(cls, table):
+    def _parse_treasure_device(cls, table):
         trs = table.xpath('tbody/tr')
         title = table.getparent().get('title')
         name = trs[0].xpath('string(td/div/big)')
         type_text = trs[0].xpath('string(th/p[last()])')
-        effects, level_values = cls._extract_level_effects(
+        effects, level_values = cls._parse_level_effects(
             trs[2 - len(trs) % 2:])
         del trs, table, cls
         return locals()
 
-    def extract_skills(self):
+    def parse_skills(self):
         tables = self.tables_between(
             self._wikitable_nomobile_logo, '持有技能', keep_struct=True)
         skills = []
@@ -66,19 +66,19 @@ class ServantIE(MooncellIE):
             if not isinstance(items, list):
                 items = [items]
             for table in items:
-                skills.append(self._extract_skills(table, index))
+                skills.append(self._parse_skills(table, index))
         return skills
 
     @classmethod
-    def _extract_skills(cls, table, num):
+    def _parse_skills(cls, table, num):
         trs = table.xpath('tbody/tr')
         name = trs[0].xpath('string(th[2])').rstrip('\n')
         title = table.getparent().get('title')
-        effects, level_values = cls._extract_level_effects(trs[2:])
-        del trs, cls
+        effects, level_values = cls._parse_level_effects(trs[2:])
+        del trs, cls, table
         return locals()
 
-    def extract_class_skills(self):
+    def parse_class_skills(self):
         tables = self.tables_between(
             self._wikitable_nomobile_logo, '职阶技能', keep_struct=True)
 
@@ -115,7 +115,7 @@ class ServantIE(MooncellIE):
         return class_skills
 
     @staticmethod
-    def _extract_materials(table):
+    def _parse_materials(table):
         # remove last row for total material
         trs = table.xpath('tbody/tr')[:-1]
         titles = ((td.xpath('descendant::a/@title') for td in tr.xpath('td'))
@@ -126,24 +126,24 @@ class ServantIE(MooncellIE):
             item_names += row
         return item_names
 
-    def extract_skill_materials(self):
+    def parse_skill_materials(self):
         for table in self.tables_between(self._wikitable_nomobile, '技能强化'):
-            return self._extract_materials(table)
+            return self._parse_materials(table)
         return []
 
-    def extract_ascension_materials(self):
+    def parse_ascension_materials(self):
         for table in self.tables_between(self._wikitable_nomobile, '灵基再临（从者进化）'):
-            return self._extract_materials(table)
+            return self._parse_materials(table)
         return []
 
-    def extract_bond_stories(self):
+    def parse_bond_stories(self):
         tables = self.tables_between(self._wikitable, '资料')
-        stories = [self._extract_bond_stories(
+        stories = [self._parse_bond_stories(
             table) for table in tables if table.getprevious().get('class')]
         return stories
 
     @staticmethod
-    def _extract_bond_stories(table):
+    def _parse_bond_stories(table):
         trs = table.xpath('tbody/tr')
         assert (len(trs) == 2)
         condition = trs[0].xpath('string(th)').rstrip('\n')
@@ -151,14 +151,14 @@ class ServantIE(MooncellIE):
         del trs, table
         return locals()
 
-    def extract_dialogues(self):
+    def parse_dialogues(self):
         tables = self.tables_between(self._mw_wikitable_nomobile, '语音')
         dialogues = [dialogue for dialogue in [
-            self._extract_dialogues(table) for table in tables]]
+            self._parse_dialogues(table) for table in tables]]
         return dialogues
 
     @staticmethod
-    def _extract_dialogues(table):
+    def _parse_dialogues(table):
         trs = table.xpath('tbody/tr')
         category = trs[0].xpath('string(th/b)')
 
