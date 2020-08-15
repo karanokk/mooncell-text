@@ -18,7 +18,7 @@ class TextRepositoryTest(unittest.TestCase):
         when(self.local).pages_revid([]).thenReturn({'齐格飞': 1000, '卫宫': 1099})
         when(self.remote).pages_revid([]).thenReturn(
             {'齐格飞': 1000, '卫宫': 1100, '阿蒂拉': 1200})
-        dirty_servants = self.repo.check_dirty_servants()
+        dirty_servants = self.repo.checkout_dirty_servants()
         self.assertEqual(dirty_servants, {'卫宫': 1100, '阿蒂拉': 1200})
 
     def test_lastest_servants(self):

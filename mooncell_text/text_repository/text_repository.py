@@ -16,6 +16,8 @@ class TextRepository:
         self.dirty_servants = dirty_servants
         self._servants_name_link = None
 
+    # ------------------------------ Servant ------------------------------ #
+
     @property
     def servants_name_link(self):
         if not self._servants_name_link:
@@ -23,7 +25,7 @@ class TextRepository:
                 map(lambda x: x[0], self.lastest_servants(ServantProp.name_link)))
         return self._servants_name_link
 
-    def check_dirty_servants(self):
+    def checkout_dirty_servants(self):
         local_revids = self.local_source.pages_revid(self.servants_name_link)
         remote_revids = self.remote_source.pages_revid(self.servants_name_link)
         self.dirty_servants = dict(
@@ -36,7 +38,7 @@ class TextRepository:
 
     def servant(self, name: str):
         if self.dirty_servants is None:
-            self.check_dirty_servants()
+            self.checkout_dirty_servants()
         page: dict = None
         if name in self.dirty_servants.keys():
             page = self.remote_source.page(
