@@ -29,11 +29,12 @@ jobs:
     
     - name: Run test
       run: |
-        coverage run -m unittest discover
+        pipenv run coverage run --source mooncell_text -m unittest discover -s tests
+        pipenv run coverage xml
         
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: .coverage
+        file: ./coverage.xml
         
