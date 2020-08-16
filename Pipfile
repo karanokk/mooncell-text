@@ -4,15 +4,12 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pylint = "*"
-autopep8 = "*"
-rope = "*"
+mockito = "*"
+coverage = "*"
 
 [packages]
 requests = "*"
 lxml = "*"
-mockito = "*"
-coverage = "*"
 
 [requires]
 python_version = "3.8"
