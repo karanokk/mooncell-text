@@ -2,8 +2,8 @@ import unittest
 
 from mockito import ANY, ARGS, mock, verify, verifyZeroInteractions, when
 
-from mooncell_text.mediawiki_api import ParseProp
-from mooncell_text.text_repository import TextRepository, TextSource
+from umaster.mooncell_text.mediawiki_api import ParseProp
+from umaster.mooncell_text.text_repository import TextRepository, TextSource
 
 
 class TextRepositoryTest(unittest.TestCase):
