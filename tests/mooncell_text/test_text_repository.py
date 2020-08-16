@@ -1,6 +1,6 @@
 import unittest
 
-from mockito import ANY, ARGS, mock, verify, verifyZeroInteractions, when
+from mockito import ANY, ARGS, mock, verify, when
 
 from umaster.mooncell_text.mediawiki_api import ParseProp
 from umaster.mooncell_text.text_repository import TextRepository, TextSource

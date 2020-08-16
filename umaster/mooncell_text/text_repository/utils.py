@@ -1,4 +1,3 @@
-
 def csv_from_page(s: str, *props):
     import re
     res = re.search(r'var raw_str = "(.*)";', s)

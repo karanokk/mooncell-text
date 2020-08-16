@@ -1,8 +1,6 @@
-import typing
-
-from ..mediawiki_api import ParseProp
 from .text_source import TextSource
 from .utils import ServantProp, csv_from_page
+from ..mediawiki_api import ParseProp
 
 
 class TextRepository:

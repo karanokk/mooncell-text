@@ -25,7 +25,7 @@ class ParseParameter:
 
     # 要获取的信息束
     prop = 'prop'
-    
+
     # 要用于包裹解析输出的CSS类。
     wrapoutputclass = 'wrapoutputclass'
 

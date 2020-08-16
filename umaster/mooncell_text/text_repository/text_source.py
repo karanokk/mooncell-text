@@ -1,4 +1,4 @@
-from typing import Sequence, Dict, Tuple
+from typing import Sequence, Dict
 
 
 class TextSource:

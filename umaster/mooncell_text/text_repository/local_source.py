@@ -1,6 +1,5 @@
-import os
 import json
-
+import os
 from typing import Sequence, Dict
 
 from .text_source import TextSource

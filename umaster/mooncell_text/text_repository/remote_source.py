@@ -1,7 +1,7 @@
-from typing import Sequence, Dict, Tuple
+from typing import Sequence, Dict
 
-from ..mediawiki_api import *
 from .text_source import TextSource
+from ..mediawiki_api import *
 
 
 class RemoteTextSource(TextSource):
@@ -20,7 +20,7 @@ class RemoteTextSource(TextSource):
         result = {}
         n = 0
         while n < len(titles):
-            title_slice = titles[n:n+50]
+            title_slice = titles[n:n + 50]
             params = {
                 QueryParameter.titles: title_slice,
                 QueryParameter.prop: QueryProp.revisions

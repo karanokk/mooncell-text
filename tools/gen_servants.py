@@ -1,8 +1,7 @@
-import os
-import sys
 import json
 import logging
-
+import os
+import sys
 from optparse import OptionParser
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -34,7 +33,7 @@ def main():
         else:
             logger.info('Servants no update.')
             return
-        
+
     servants_dir = os.path.join(output_path, 'servants')
     _create_dir_if_not_exists(servants_dir)
     log_dir = os.path.dirname(log_file)
@@ -45,7 +44,7 @@ def main():
 
     for servant in mooncell_text.extract_all_servants():
         filename = servant['basic_data']['name'] + '.json'
-        servant_file = os.path.join(servants_dir, filename)        
+        servant_file = os.path.join(servants_dir, filename)
         with open(servant_file, 'w+') as f:
             json.dump(servant, f)
 
