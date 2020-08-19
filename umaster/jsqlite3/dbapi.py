@@ -5,23 +5,31 @@ from . import convert
 
 
 class JConnection(sqlite3.Connection):
-    def load_json(self, tables):
+    def insert(self, table_name, **kwargs):
+        keys = kwargs.keys()
+        insert_sql = f'INSERT INTO {table_name} ({",".join(keys)}) values ({",".join(["?"] * len(keys))})'
+        self.execute(insert_sql, kwargs.values)
+
+    def load_table_from_json(self, table_name: str, rows: List[dict]):
+        if not (isinstance(rows, list) and len(rows)):
+            return
+        # create table
+        primary_keys = convert.possible_primary_keys(rows)
+        primary_key = primary_keys[0] if primary_keys else None
+        creation_sql = convert.creation_sql(
+            table_name, rows, primary_key=primary_key)
+        self.execute(creation_sql)
+        # insert rows
+        keys = rows[0].keys()
+        insert_sql = f'INSERT INTO {table_name} ({",".join(keys)}) values ({",".join(["?"] * len(keys))})'
+        self.executemany(insert_sql, map(
+            lambda x: tuple(x.values()), rows))
+        self.commit()
+
+    def load_tables_from_json(self, tables):
         self.execute("BEGIN")
         for table_name, rows in tables.items():
-            if not (isinstance(rows, list) and len(rows)):
-                continue
-            # create table
-            primary_keys = convert.possible_primary_keys(rows)
-            primary_key = primary_keys[0] if primary_keys else None
-            creation_sql = convert.creation_sql(
-                table_name, rows, primary_key=primary_key)
-            self.execute(creation_sql)
-            # insert rows
-            keys = rows[0].keys()
-            insert_sql = f'INSERT INTO {table_name} ({",".join(keys)}) values ({",".join(["?"] * len(keys))})'
-            self.executemany(insert_sql, map(
-                lambda x: tuple(x.values()), rows))
-        self.commit()
+            self.load_table_from_json(table_name, rows)
 
 
 def connect(database, **kwargs) -> JConnection:
